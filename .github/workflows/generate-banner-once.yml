@@ -1,0 +1,33 @@
+name: Generate ReadmeForge visual banner (one-time)
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  generate-banner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install image generation dependency
+        run: python -m pip install --upgrade Pillow
+      - name: Render animated banner
+        run: python scripts/generate_banner.py
+      - name: Publish GIF and remove this temporary workflow
+        run: |
+          rm .github/workflows/generate-banner-once.yml
+          git add assets/readmeforge/readmeforge-banner.gif
+          git add -u .github/workflows/generate-banner-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "[skip ci] docs: publish animated ReadmeForge banner"
+          git push origin HEAD:main
