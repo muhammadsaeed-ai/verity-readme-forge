@@ -118,9 +118,28 @@ def main(argv: list[str] | None = None) -> int:
     except SystemExit as exc:
         return int(exc.code or 0)
     try:
+        scan_excludes = list(getattr(args, "exclude", []))
+        # Keep generated output out of the inventory so a README generated
+        # in-place remains deterministic when checked on the next run.
+        try:
+            scan_root = Path(args.repository).expanduser().resolve(strict=True)
+            candidate = None
+            if args.command == "generate" and args.output != "-":
+                candidate = Path(args.output).expanduser().resolve(strict=False)
+            elif args.command == "check":
+                candidate = Path(args.file).expanduser()
+                if not candidate.is_absolute():
+                    candidate = scan_root / candidate
+                candidate = candidate.resolve(strict=False)
+            if candidate is not None:
+                relative_output = candidate.relative_to(scan_root).as_posix()
+                if relative_output not in {"", "."} and relative_output not in scan_excludes:
+                    scan_excludes.append(relative_output)
+        except (OSError, RuntimeError, ValueError):
+            pass
         report = inspect_repository(
             args.repository,
-            excludes=getattr(args, "exclude", []),
+            excludes=scan_excludes,
             max_files=getattr(args, "max_files", 50_000),
         )
         if args.command == "inspect":
