@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/readme/hero.svg" alt="ReadmeForge — documentation grounded in repository evidence" width="100%" />
+  <img src="assets/readmeforge/readmeforge-banner.gif" alt="Animated ReadmeForge workflow: inspect repository evidence, map structure, and prepare a README draft." width="100%" />
 </p>
 
 <p align="center"><strong>From a codebase to a README draft that tells you what it actually found.</strong></p>
@@ -13,6 +13,12 @@
 </p>
 
 **ReadmeForge** is an offline-first README starter generator. It inspects local project manifests, entry points, tests, source layout, license files, and GitHub Actions workflows, then produces a structured Markdown draft. It does not install dependencies, import the project, execute scripts, or upload source code.
+
+<p align="center"><img src="assets/readmeforge/hero.svg" alt="ReadmeForge custom product visual: local inspection, manifest detection, and a structured documentation draft." width="100%" /></p>
+
+<p align="center"><img src="assets/readmeforge/output-preview.svg" alt="Illustrative preview of an evidence-backed generated README, installation snippet, architecture map, and review boundaries." width="100%" /></p>
+
+<p align="center"><sub>The output preview is an illustrative mockup, not a screenshot of a running GUI.</sub></p>
 
 <p align="center"><img src="assets/readme/workflow.svg" alt="Four-stage ReadmeForge workflow: inspect, extract evidence, draft README, review and publish" width="100%" /></p>
 
@@ -96,7 +102,7 @@ flowchart LR
     F --> G[Human review]
 ```
 
-The scanner and renderer are deterministic: the same inspected files and runtime produce the same profile and draft, apart from the absolute root path recorded in the profile. No project source is imported or executed.
+The scanner and renderer are deterministic: the same inspected files and runtime produce the same profile and draft. Profiles store repository-relative paths and do not record the absolute machine root. No project source is imported or executed.
 
 ## Development and tests
 
@@ -111,7 +117,7 @@ GitHub Actions runs the tests, lint check, CLI smoke check, and package build ag
 
 ## Security and scope
 
-ReadmeForge treats repository contents as data. It skips common generated/vendor directories, does not follow directory symlinks, skips file symlinks, caps the inventory at 5,000 files, and limits individual text reads. It does not execute discovered commands. Review the generated README before publication; it is a reviewed starting point, not a claim that the target project is correct, secure, production-ready, or fully tested.
+ReadmeForge treats repository contents as data. It skips common generated/vendor directories, does not follow directory symlinks, skips file symlinks, caps the inventory at 50,000 files, and limits individual text reads. It does not execute discovered commands. Review the generated README before publication; it is a reviewed starting point, not a claim that the target project is correct, secure, production-ready, or fully tested.
 
 ## Roadmap
 
