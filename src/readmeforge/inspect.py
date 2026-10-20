@@ -161,9 +161,9 @@ def _toml_summary(text: str) -> dict[str, Any]:
             if match:
                 scripts[match.group(1)] = match.group(2)
     return {
-        "name": find(r"^\s*name\s*=\s*['\\"]([^'\\"]+)['\\"]"),
-        "description": find(r"^\s*description\s*=\s*['\\"]([^'\\"]+)['\\"]"),
-        "requires_python": find(r"^\s*requires-python\s*=\s*['\\"]([^'\\"]+)['\\"]"),
+        "name": find(r"""^\s*name\s*=\s*['"]([^'"]+)['"]"""),
+        "description": find(r"""^\s*description\s*=\s*['"]([^'"]+)['"]"""),
+        "requires_python": find(r"""^\s*requires-python\s*=\s*['"]([^'"]+)['"]"""),
         "scripts": scripts,
         "dependency_count": 0,
     }
