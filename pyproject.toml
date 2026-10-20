@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "readmeforge"
+version = "0.1.0"
+description = "Generate evidence-based project READMEs from local repository inspection."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Mohammed Saeed" }]
+keywords = ["readme-generator", "documentation-generator", "github-readme", "repository-analysis", "architecture-diagrams", "markdown", "developer-tools", "readmeforge", "verityagent"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Documentation",
+  "Topic :: Software Development",
+  "Topic :: Utilities",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3,<10", "ruff>=0.11,<1", "build>=1.2,<2"]
+
+[project.scripts]
+readmeforge = "readmeforge.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/muhammadsaeed-ai/verity-readme-forge"
+Repository = "https://github.com/muhammadsaeed-ai/verity-readme-forge"
+Issues = "https://github.com/muhammadsaeed-ai/verity-readme-forge/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]

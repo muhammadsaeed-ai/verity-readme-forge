@@ -1,0 +1,5 @@
+[project]
+name = "sample-python-service"
+version = "0.1.0"
+description = "A small fixture used to demonstrate ReadmeForge manifest detection."
+requires-python = ">=3.10"
