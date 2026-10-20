@@ -27,8 +27,8 @@
 - **Evidence-backed project facts.** Language, package metadata, test files, CI workflows, license presence, entry points, and selected dependencies come from files found in the checkout.
 - **Offline by default.** The scanner reads local files only; it makes no API calls and does not require an API key.
 - **Preserves the original README.** Default output is `README.generated.md`. An existing target is never overwritten unless `--force` is explicitly supplied.
-- **Honest about inference.** Suggested install/run commands may require review. The generated architecture diagram is explicitly labeled as generic until a project-specific design is supplied.
-- **Useful in automation.** `inspect --json` emits a versioned machine-readable profile that can be used by other local tooling.
+- **Honest about inference.** Suggested install/run commands may require review. The generated repository map reflects observed file layout, not runtime dependency relationships.
+- **Useful in automation.** `inspect --format json` emits a versioned machine-readable profile that can be used by other local tooling.
 
 ## Quick start
 
@@ -55,7 +55,7 @@ python -m pip install -e .
 
 ```bash
 readmeforge inspect /path/to/project
-readmeforge inspect /path/to/project > profile.json
+readmeforge inspect /path/to/project --format json > profile.json
 ```
 
 The profile includes detected name/description, language, package manager, available entry points, declared dependencies, source and test file samples, workflow paths, license presence, and notes where evidence is missing.
@@ -69,6 +69,9 @@ readmeforge generate /path/to/project
 readmeforge generate /path/to/project --output docs/README-draft.md
 # Replace an existing target only when you explicitly choose to do so
 readmeforge generate /path/to/project --output README.md --force
+
+# Check whether README.md matches a fresh generated draft
+readmeforge check /path/to/project
 ```
 
 ### Run from a source checkout
@@ -108,7 +111,7 @@ The scanner and renderer are deterministic: the same inspected files and runtime
 
 ```bash
 python -m pip install -e ".[dev]"
-python -m unittest discover -s tests -v
+python -m pytest -q
 ruff check src tests
 python -m build
 ```
