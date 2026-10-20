@@ -5,8 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from readmeforge.inspect import inspect_repository
 from readmeforge.errors import ReadmeForgeError
+from readmeforge.inspect import inspect_repository
 from readmeforge.render import render_json_report, render_readme, validate_report
 
 
