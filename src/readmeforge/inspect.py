@@ -159,7 +159,7 @@ def _toml_summary(text: str) -> dict[str, Any]:
         for line in script_section.group(1).splitlines():
             match = re.match(r"""^\s*([A-Za-z0-9_.-]+)\s*=\s*(['"])(.*?)\2\s*$""", line)
             if match:
-                scripts[match.group(1)] = match.group(2)
+                scripts[match.group(1)] = match.group(3)
     return {
         "name": find(r"""^\s*name\s*=\s*['"]([^'"]+)['"]"""),
         "description": find(r"""^\s*description\s*=\s*['"]([^'"]+)['"]"""),
