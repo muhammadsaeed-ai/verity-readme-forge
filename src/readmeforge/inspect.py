@@ -157,7 +157,7 @@ def _toml_summary(text: str) -> dict[str, Any]:
     script_section = re.search(r"(?ms)^\[project\.scripts\]\s*(.*?)(?=^\[|\Z)", text)
     if script_section:
         for line in script_section.group(1).splitlines():
-            match = re.match(r"^\s*([A-Za-z0-9_.-]+)\s*=\s*['\\"]([^'\\"]+)['\\"]", line)
+            match = re.match(r"""^\s*([A-Za-z0-9_.-]+)\s*=\s*(['"])(.*?)\2\s*$""", line)
             if match:
                 scripts[match.group(1)] = match.group(2)
     return {
