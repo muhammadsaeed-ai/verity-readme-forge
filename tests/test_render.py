@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from readmeforge.inspect import inspect_repository
+from readmeforge.errors import ReadmeForgeError
 from readmeforge.render import render_json_report, render_readme, validate_report
 
 
@@ -47,7 +48,7 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(json.loads(output)["schema_version"], 1)
 
     def test_schema_validation(self) -> None:
-        with self.assertRaises(Exception):
+        with self.assertRaises(ReadmeForgeError):
             validate_report({"schema_version": 99})
 
     def test_structure_map_discloses_its_limit(self) -> None:
