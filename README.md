@@ -1,154 +1,124 @@
 <p align="center">
-  <img src="assets/readmeforge/readmeforge-banner.gif" alt="Animated ReadmeForge workflow: inspect repository evidence, map structure, and prepare a README draft." width="100%" />
+  <img src="assets/readme/hero.svg" alt="ReadmeForge — documentation grounded in repository evidence" width="100%" />
 </p>
 
-<h1 align="center">ReadmeForge</h1>
+<p align="center"><strong>From a codebase to a README draft that tells you what it actually found.</strong></p>
+<p align="center"><sub>Built and maintained by <a href="https://verityagent.lovable.app"><strong>VerityAgent</strong></a> · Open-source developer tooling</sub></p>
 
 <p align="center">
-  <strong>Turn repository evidence into documentation developers can trust.</strong><br/>
-  A local-first README generator by <strong>VerityAgent</strong>. It inspects project manifests and file structure, then drafts installation guidance, script references, architecture diagrams, and contribution instructions.
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10+" />
+  <img src="https://img.shields.io/badge/Runtime%20network%20calls-0-16a085?style=for-the-badge" alt="No network calls" />
+  <img src="https://img.shields.io/badge/Output-Markdown-4353ff?style=for-the-badge" alt="Markdown output" />
+  <a href="https://github.com/muhammadsaeed-ai/verity-readme-forge/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/muhammadsaeed-ai/verity-readme-forge/ci.yml?branch=main&style=for-the-badge&label=CI" alt="CI status" /></a>
 </p>
 
-<p align="center">
-  <a href="#quick-start">Quick start</a> ·
-  <a href="#visual-workflow">Visual workflow</a> ·
-  <a href="docs/ARCHITECTURE.md">Architecture</a> ·
-  <a href="docs/USAGE.md">Usage</a>
-</p>
+**ReadmeForge** is an offline-first README starter generator. It inspects local project manifests, entry points, tests, source layout, license files, and GitHub Actions workflows, then produces a structured Markdown draft. It does not install dependencies, import the project, execute scripts, or upload source code.
 
-<p align="center">
-  <img alt="CI" src="https://img.shields.io/github/actions/workflow/status/muhammadsaeed-ai/verity-readme-forge/ci.yml?label=CI&style=for-the-badge&logo=githubactions" />
-  <img alt="Dependency audit" src="https://img.shields.io/github/actions/workflow/status/muhammadsaeed-ai/verity-readme-forge/security.yml?label=dependency%20audit&style=for-the-badge" />
-  <img alt="Python" src="https://img.shields.io/badge/Python-3.10%E2%80%933.14-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img alt="Runtime dependencies" src="https://img.shields.io/badge/runtime%20dependencies-zero-18A999?style=for-the-badge" />
-  <img alt="License" src="https://img.shields.io/badge/license-MIT-6478FF?style=for-the-badge" />
-</p>
+<p align="center"><img src="assets/readme/workflow.svg" alt="Four-stage ReadmeForge workflow: inspect, extract evidence, draft README, review and publish" width="100%" /></p>
 
-> **v0.1.0 alpha · zero mandatory runtime dependencies.** ReadmeForge reads file metadata and selected bounded manifests locally. It does not import or execute the repository being inspected and makes no network requests.
+## Why it is different
 
----
-
-## The hook: make an unfamiliar repository explain itself
-
-A strong README should answer a developer's first questions: What is here? How do I install it? Where is the source? Which commands are declared? How is the repository organized?
-
-ReadmeForge builds a first draft from evidence rather than pretending to understand unobserved runtime behavior.
-
-<p align="center">
-  <img src="assets/readmeforge/hero.svg" alt="ReadmeForge visual identity and product concept: inspect files, detect manifests and scripts, and assemble a documentation draft." width="100%" />
-</p>
-
-## What it generates
-
-| README section | Evidence used |
-|---|---|
-| Project introduction | Package name and description from recognized manifests, with a cautious fallback if absent |
-| Installation guidance | Common manifests such as pyproject.toml, package.json, Cargo.toml, go.mod, composer.json, or Gemfile |
-| Usage examples | Declared package scripts and Python console-script metadata when available |
-| Architecture overview | Mermaid map from detected folders, manifests, tests, docs, and CI paths |
-| Repository signals | Language counts, manifests, license and testing evidence, not invented product capabilities |
-| Test instructions | Candidate commands inferred from familiar test folders and manifest scripts, labeled for review |
-| Contribution and security guidance | A reviewable baseline checklist with reminders to verify project-specific details |
-
-## Visual workflow
-
-<p align="center">
-  <img src="assets/readmeforge/workflow.svg" alt="ReadmeForge workflow: inventory local files, read selected manifests, normalize evidence, and render a README draft for review." width="100%" />
-</p>
+- **Evidence-backed project facts.** Language, package metadata, test files, CI workflows, license presence, entry points, and selected dependencies come from files found in the checkout.
+- **Offline by default.** The scanner reads local files only; it makes no API calls and does not require an API key.
+- **Preserves the original README.** Default output is `README.generated.md`. An existing target is never overwritten unless `--force` is explicitly supplied.
+- **Honest about inference.** Suggested install/run commands may require review. The generated architecture diagram is explicitly labeled as generic until a project-specific design is supplied.
+- **Useful in automation.** `inspect --json` emits a versioned machine-readable profile that can be used by other local tooling.
 
 ## Quick start
 
-Python 3.10 or newer. Runtime operation uses the Python standard library.
+Requires Python 3.10 or newer.
 
-~~~bash
+```bash
 git clone https://github.com/muhammadsaeed-ai/verity-readme-forge.git
 cd verity-readme-forge
 python -m venv .venv
-~~~
+```
 
-Activate the virtual environment, then install the package.
+Activate the environment, then install:
 
-**Windows PowerShell**
-
-~~~powershell
-.\.venv\Scripts\Activate.ps1
-python -m pip install .
-~~~
-
-**macOS / Linux**
-
-~~~bash
+```bash
+# Linux / macOS
 source .venv/bin/activate
-python -m pip install .
-~~~
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
 
-## Generate your first README
+python -m pip install -e .
+```
 
-Start with a separate draft so you never lose an existing README:
+### Inspect a project
 
-~~~bash
+```bash
 readmeforge inspect /path/to/project
-readmeforge generate /path/to/project --output README.generated.md
-~~~
+readmeforge inspect /path/to/project > profile.json
+```
 
-Review the generated file. Replace a project's README only when you're ready:
+The profile includes detected name/description, language, package manager, available entry points, declared dependencies, source and test file samples, workflow paths, license presence, and notes where evidence is missing.
 
-~~~bash
-readmeforge generate /path/to/project --output /path/to/project/README.md --force
-~~~
+### Generate a README draft
 
-The force option is required for an existing destination. ReadmeForge never silently overwrites human-authored documentation and does not merge generated text with existing prose.
+```bash
+readmeforge generate /path/to/project
+# Writes README.generated.md without touching README.md
 
-## Useful commands
+readmeforge generate /path/to/project --output docs/README-draft.md
+# Replace an existing target only when you explicitly choose to do so
+readmeforge generate /path/to/project --output README.md --force
+```
 
-~~~bash
-readmeforge inspect .
-readmeforge inspect . --format json --output readmeforge-report.json
-readmeforge generate . --output README.generated.md --exclude "generated/**" --exclude "*.snap"
-readmeforge check .
-~~~
+### Run from a source checkout
 
-Exit codes for <code>check</code>: <code>0</code> means the file exactly matches generated content, <code>1</code> means it is missing or different, and <code>2</code> indicates an inspection or usage error.
+```bash
+python -m readmeforge.cli --help
+python -m readmeforge.cli inspect .
+```
 
-## Trust is built into the workflow
+## What the scan observes
 
-- **Local-first:** no upload or telemetry request is made.
-- **No target-code execution:** inspected modules are never imported, run, or installed.
-- **Bounded:** file inventory and manifest reads have size limits.
-- **Safer file handling:** symlinks are skipped; caches, virtual environments, build outputs, and vendor folders are excluded by default.
-- **No surprise overwrite:** existing output requires an explicit <code>--force</code>.
-- **Evidence over fiction:** inferred commands are recommendations, not proof that a program runs; folders are not turned into claims about implemented features.
-- **Reviewable output:** source contents are not embedded into reports, which store relative paths rather than the absolute machine path.
+| Area | Evidence used | Limitation |
+|---|---|---|
+| Project identity | `pyproject.toml`, `package.json`, README headings | Names/descriptions can still be generic or stale |
+| Install and run hints | Packaging manifests, declared scripts, test layout | Commands are inferred, not executed to verify they succeed |
+| Source layout | Bounded inventory of common source extensions and directories | Large inventories are capped to prevent runaway scans |
+| Tests | Conventional `tests/`, `test/`, and common test filenames | A detected test file does not mean the tests pass |
+| CI | `.github/workflows/*.yml` and `.yaml` | Workflow files are listed, not executed or audited for semantics |
+| License | Common license filenames | File existence does not replace reviewing the license text |
+| Dependencies | Supported project/runtime manifest declarations | Transitive dependency resolution is not performed |
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A[Local checkout] --> B[Bounded file inventory]
+    B --> C[Manifest and layout parsers]
+    C --> D[Evidence profile JSON]
+    D --> E[Markdown renderer]
+    E --> F[README draft]
+    F --> G[Human review]
+```
+
+The scanner and renderer are deterministic: the same inspected files and runtime produce the same profile and draft, apart from the absolute root path recorded in the profile. No project source is imported or executed.
 
 ## Development and tests
 
-~~~bash
+```bash
 python -m pip install -e ".[dev]"
-python -m pytest
-python -m ruff check src tests
+python -m unittest discover -s tests -v
+ruff check src tests
 python -m build
-~~~
+```
 
-CI is configured for Python 3.10–3.14 on Ubuntu, Windows, and macOS. Workflow badges reflect their latest run, not a security certification or proof of production readiness.
+GitHub Actions runs the tests, lint check, CLI smoke check, and package build against Python 3.10–3.14.
 
-## Current boundaries
+## Security and scope
 
-ReadmeForge is an alpha documentation assistant, not an autonomous source-code reviewer. It does not infer true business logic, run tests in the target repository, validate external services, prove licenses are legally appropriate, or guarantee that detected commands succeed. It supports common manifest conventions and provides a structured starting point that maintainers should review.
+ReadmeForge treats repository contents as data. It skips common generated/vendor directories, does not follow directory symlinks, skips file symlinks, caps the inventory at 5,000 files, and limits individual text reads. It does not execute discovered commands. Review the generated README before publication; it is a reviewed starting point, not a claim that the target project is correct, secure, production-ready, or fully tested.
 
-## Documentation
+## Roadmap
 
-- [Architecture and safety model](docs/ARCHITECTURE.md)
-- [Usage guide](docs/USAGE.md)
-- [Contributing](CONTRIBUTING.md)
-- [Security policy](SECURITY.md)
-- [Changelog](CHANGELOG.md)
+- Add project-specific architecture templates selected by explicit configuration.
+- Add plugin interfaces for additional manifest ecosystems.
+- Add optional machine-readable custom section definitions without making external AI a runtime requirement.
 
-## Project identity and discovery
+## License
 
-ReadmeForge is a developer productivity tool from **VerityAgent**, focused on professional README generation, Markdown documentation, architecture diagrams, project inspection, and trustworthy developer workflows.
-
-Suggested GitHub topics: <code>readme-generator</code>, <code>github-readme</code>, <code>documentation-generator</code>, <code>markdown</code>, <code>repository-analysis</code>, <code>architecture-diagrams</code>, <code>developer-tools</code>, <code>developer-productivity</code>, <code>python</code>, <code>open-source</code>.
-
-<p align="center">
-  <strong>ReadmeForge · Your project already has evidence. Turn it into a story.</strong>
-</p>
+MIT. See [`LICENSE`](LICENSE).
