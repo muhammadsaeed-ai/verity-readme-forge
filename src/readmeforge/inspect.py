@@ -154,16 +154,16 @@ def _toml_summary(text: str) -> dict[str, Any]:
         return found.group(1).strip() if found else None
 
     scripts: dict[str, str] = {}
-    script_section = re.search(r"(?ms)^\\[project\\.scripts\\]\\s*(.*?)(?=^\\[|\\Z)", text)
+    script_section = re.search(r"(?ms)^\[project\.scripts\]\s*(.*?)(?=^\[|\Z)", text)
     if script_section:
         for line in script_section.group(1).splitlines():
-            match = re.match(r"^\\s*([A-Za-z0-9_.-]+)\\s*=\\s*['\\"]([^'\\"]+)['\\"]", line)
+            match = re.match(r"^\s*([A-Za-z0-9_.-]+)\s*=\s*['\\"]([^'\\"]+)['\\"]", line)
             if match:
                 scripts[match.group(1)] = match.group(2)
     return {
-        "name": find(r"^\\s*name\\s*=\\s*['\\"]([^'\\"]+)['\\"]"),
-        "description": find(r"^\\s*description\\s*=\\s*['\\"]([^'\\"]+)['\\"]"),
-        "requires_python": find(r"^\\s*requires-python\\s*=\\s*['\\"]([^'\\"]+)['\\"]"),
+        "name": find(r"^\s*name\s*=\s*['\\"]([^'\\"]+)['\\"]"),
+        "description": find(r"^\s*description\s*=\s*['\\"]([^'\\"]+)['\\"]"),
+        "requires_python": find(r"^\s*requires-python\s*=\s*['\\"]([^'\\"]+)['\\"]"),
         "scripts": scripts,
         "dependency_count": 0,
     }
