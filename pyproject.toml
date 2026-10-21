@@ -9,7 +9,7 @@ description = "Generate evidence-based project READMEs from local repository ins
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
-authors = [{ name = "Mohammed Saeed" }]
+authors = [{ name = "Muhammad Saeed" }]
 keywords = ["readme-generator", "documentation-generator", "github-readme", "repository-analysis", "architecture-diagrams", "markdown", "developer-tools", "readmeforge", "verityagent"]
 classifiers = [
   "Development Status :: 3 - Alpha",
